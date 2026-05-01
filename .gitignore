@@ -1,0 +1,9 @@
+grocery_env/
+__pycache__/
+*.pt
+*.onnx
+*.zip
+data/raw/
+results/
+.DS_Store
+*.pyc
