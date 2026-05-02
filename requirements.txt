@@ -1,0 +1,11 @@
+tensorflow
+opencv-python
+numpy
+pandas
+matplotlib
+scikit-learn
+torch
+torchvision
+ultralytics
+streamlit
+jupyter
