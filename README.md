@@ -6,10 +6,10 @@ A computer vision project that detects grocery items in images and estimates the
 
 ## Team
 
-| Name | ID |
-|------|----|
-| Partner 1 | xxxxxxx |
-| Partner 2 | xxxxxxx |
+| Name | 
+|------|
+| Maram Eladawy | 
+| Nourallah Ghonim | 
 
 Course: Computer Vision — [Course Code]  
 Submission date: [Date]
