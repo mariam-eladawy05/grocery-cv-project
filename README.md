@@ -11,8 +11,7 @@ A computer vision project that detects grocery items in images and estimates the
 | Maram Eladawy | 
 | Nourallah Ghonim | 
 
-Course: Computer Vision — [Course Code]  
-Submission date: [Date]
+Course: Computer Vision — AIN3105  
 
 ---
 
@@ -70,52 +69,9 @@ pasta, potato, rice, soda, tomato, water, yogurt, ... (25 total)
 
 ---
 
-## Project structure
-
-```
-grocery_project/
-│
-├── data/
-│   ├── raw/                        # Original downloaded dataset
-│   └── annotated/
-│       ├── images/
-│       │   ├── train/
-│       │   ├── val/
-│       │   └── test/
-│       └── labels/
-│           ├── train/
-│           ├── val/
-│           └── test/
-│
-├── models/                         # Saved model weights
-│   ├── yolov8_best.pt
-│   └── efficientnet_best.pth
-│
-├── notebooks/                      # Jupyter exploration notebooks
-│   ├── 01_data_exploration.ipynb
-│   ├── 02_yolo_training.ipynb
-│   └── 03_efficientnet_training.ipynb
-│
-├── src/
-│   ├── train_yolo.py               # YOLOv8 training script
-│   ├── train_efficientnet.py       # EfficientNet training script
-│   ├── fusion.py                   # Ensemble fusion logic
-│   ├── calorie_lookup.py           # USDA API integration
-│   └── evaluate.py                 # Evaluation & metrics
-│
-├── app/
-│   └── app.py                      # Gradio demo app
-│
-├── results/                        # Plots, metrics, sample predictions
-│
-├── data.yaml                       # YOLOv8 dataset config
-├── requirements.txt
-└── README.md
-```
+## Setup & installation
 
 ---
-
-## Setup & installation
 
 ```bash
 # Clone the repo
