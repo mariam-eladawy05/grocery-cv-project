@@ -1,126 +1,311 @@
-# Smart Grocery Recognition & Calorie Estimator
+# Smart Grocery Recognition & Nutrition Estimator
 
-A computer vision project that detects grocery items in images and estimates their calorie content using an ensemble of two deep learning models.
+A computer vision project that recognizes grocery and supermarket products from images using deep learning classification and object detection models, then estimates nutrition information using the USDA FoodData Central API.
 
 ---
 
-## Team
+# Team
 
-| Name | 
+| Name |
 |------|
-| Maram Eladawy | 
-| Nourallah Ghonim | 
+| Nourallah Ghonim |
+| Maram Eladawy |
 
-Course: Computer Vision — AIN3105  
 
----
-
-## Project overview
-
-This project tackles the problem of automatic food recognition and nutritional estimation from a single image. Given a photo of grocery items or a meal, the system:
-
-1. Detects and localizes each item using YOLOv8 (object detection)
-2. Classifies each item with higher precision using EfficientNet-B0 (image classification)
-3. Fuses both model outputs using a weighted ensemble
-4. Estimates calorie content per item using the USDA FoodData Central database
+Course: Computer Vision — AIN3105
 
 ---
 
-## Demo
+# Project Overview
 
-![Demo screenshot](results/demo_screenshot.png)
+This project focuses on automatic grocery and supermarket product recognition from images.
 
----
+The system combines:
+- Object detection
+- Image classification
+- Nutrition estimation
 
-## Models
+into one complete deep learning pipeline.
 
-| Model | Type | Base | Task |
-|-------|------|------|------|
-| YOLOv8n | Object detection | COCO pretrained | Localize & label grocery items |
-| EfficientNet-B0 | Image classification | ImageNet pretrained | Fine-grained food classification |
-
-Both models are fine-tuned on the Freiburg Groceries Dataset with custom annotated images added.
-
----
-
-## Results
-
-| Model | Metric | Score |
-|-------|--------|-------|
-| YOLOv8 (solo) | mAP50 | xx.x% |
-| EfficientNet (solo) | Top-1 accuracy | xx.x% |
-| Ensemble (fused) | Top-1 accuracy | xx.x% |
+The project supports:
+- Grocery image classification
+- Egyptian supermarket product recognition
+- Randomized dataset testing
+- Nutrition estimation for food products
+- YOLO object localization for real-world scenes
 
 ---
 
-## Dataset
+# Final Pipeline
 
-- **Base dataset**: [Freiburg Groceries Dataset](https://github.com/PhilJd/freiburg_groceries_dataset) — 25 classes, ~5000 images
-- **Custom annotations**: xx images annotated manually using Roboflow
-- **Augmentations**: horizontal flip, brightness/contrast shift, mosaic
+The final pipeline works as follows:
 
-### Classes
-
-```
-apple, banana, bread, butter, carrot, cheese, chicken, chocolate,
-coffee, egg, fish, grape, juice, milk, mushroom, onion, orange,
-pasta, potato, rice, soda, tomato, water, yogurt, ... (25 total)
+```text
+Input Image
+→ Product Detection (YOLOv8)
+→ Product Classification (ResNet50 / MobileNetV2)
+→ Food Check
+→ USDA Nutrition API
+→ Final Nutrition Output
 ```
 
+For dataset testing:
+- Full images are classified directly because dataset images are already centered.
+
+For real-world applications:
+- YOLOv8 can first localize products before classification.
+
 ---
 
-## Setup & installation
+# Models Used
+
+| Model | Type | Task |
+|------|------|------|
+| YOLOv8n | Object Detection | Product localization |
+| ResNet50 | Image Classification | Main grocery classifier |
+| MobileNetV2 | Image Classification | Lightweight comparison model |
+
+All models use pretrained ImageNet/COCO weights and are fine-tuned for grocery recognition tasks.
 
 ---
+
+# Why Multiple Models Were Used
+
+The project satisfies the requirement:
+
+> Implement two different pretrained models and combine their outputs.
+
+The system combines:
+- YOLOv8 for localization
+- ResNet50 for classification
+
+MobileNetV2 was also added for comparison and evaluation.
+
+---
+
+# Datasets
+
+## 1. Freiburg Groceries Dataset
+
+Main grocery classification dataset.
+
+Features:
+- 25 grocery classes
+- ~5000 images
+- Single-product grocery images
+
+Dataset:
+https://github.com/PhilJd/freiburg_groceries_dataset
+
+Examples of classes:
+- pasta
+- coffee
+- milk
+- rice
+- cereal
+- juice
+- yogurt
+- chips
+- soda
+
+---
+
+## 2. Egyptian Products Dataset
+
+Additional local supermarket products dataset used to extend the system with Egyptian brands and products.
+
+Examples:
+- Bisco Misr
+- Indomie
+- Heinz
+- Tea products
+- Chips products
+
+This dataset improves real-world supermarket recognition.
+
+---
+
+# Notebook Structure
+
+## classification.ipynb
+
+Contains:
+- Dataset loading
+- Data augmentation
+- MobileNetV2 training
+- ResNet50 training
+- Model evaluation
+- Accuracy comparison
+- Model saving
+
+---
+
+## detection.ipynb
+
+Contains:
+- YOLOv8 object detection
+- Random image testing
+- Bounding box visualization
+- Object crop generation
+- Detection explanation
+
+---
+
+## final_pipeline.ipynb
+
+Contains:
+- Full grocery recognition pipeline
+- Random testing from both datasets
+- Model loading
+- Product prediction
+- Nutrition API integration
+- Food/non-food filtering
+- Final visualization
+
+---
+
+# Results
+
+## Freiburg Dataset
+
+| Model | Validation Accuracy |
+|------|------|
+| MobileNetV2 | ~69% |
+| ResNet50 | ~77% |
+
+ResNet50 achieved better performance and was selected as the main classifier.
+
+---
+
+# Important Technical Discussion
+
+## Why YOLO labels may appear incorrect
+
+YOLOv8n is pretrained on the COCO dataset, not grocery-specific datasets.
+
+Therefore:
+- object localization works correctly
+- class labels may sometimes be incorrect
+
+Example:
+- milk carton detected as "toothbrush"
+
+This is expected behavior for generic pretrained YOLO models.
+
+---
+
+## Why full-image classification was used
+
+Freiburg dataset images are:
+- centered
+- clean
+- mostly single-product images
+
+Using YOLO crops sometimes reduced classification accuracy.
+
+Therefore:
+- dataset testing uses full-image classification
+- YOLO is reserved for real-world scenes and webcam usage
+
+---
+
+# USDA Nutrition API
+
+The project integrates the USDA FoodData Central API to estimate nutrition information for detected food products.
+
+Returned information may include:
+- calories
+- protein
+- carbohydrates
+- fats
+
+Non-food products are automatically skipped.
+
+---
+
+# Bonus Features
+
+- [x] Multiple pretrained models
+- [x] YOLO + ResNet integrated pipeline
+- [x] Egyptian dataset extension
+- [x] Randomized testing pipeline
+- [x] Nutrition API integration
+- [x] Data augmentation
+- [x] Food/non-food filtering
+- [x] Dataset cleaning and improvement
+
+---
+
+# Setup & Installation
 
 ```bash
-# Clone the repo
-git clone https://github.com/yourusername/grocery_project.git
-cd grocery_project
+git clone https://github.com/yourusername/grocery-cv-project.git
 
-# Create virtual environment
+cd grocery-cv-project
+
 python -m venv grocery_env
-grocery_env\Scripts\activate       # Windows
-source grocery_env/bin/activate    # Mac/Linux
 
-# Install dependencies
+grocery_env\Scripts\activate
+
 pip install -r requirements.txt
 ```
 
 ---
 
-## How to run
+# Running the Project
 
-### Train YOLOv8
+## Classification Notebook
+
 ```bash
-python src/train_yolo.py
+jupyter notebook notebooks/classification.ipynb
 ```
 
-### Train EfficientNet
+## Detection Notebook
+
 ```bash
-python src/train_efficientnet.py
+jupyter notebook notebooks/detection.ipynb
 ```
 
-### Run the demo app
-```bash
-python app/app.py
-```
+## Final Pipeline
 
-Then open your browser at `http://localhost:7860`
+```bash
+jupyter notebook notebooks/final_pipeline.ipynb
+```
 
 ---
 
-## Bonus contributions
+# Project Structure
 
-- [x] Custom data annotation (xx images labeled via Roboflow)
-- [x] Dataset augmentation (flip, brightness, mosaic)
-- [ ] Third model — depth/portion size estimation (MiDaS)
+```text
+grocery-cv-project/
+│
+├── data/
+├── models/
+├── notebooks/
+├── results/
+├── src/
+│   └── nutrition_api.py
+│
+├── README.md
+├── requirements.txt
+└── .gitignore
+```
 
 ---
 
-## References
+# References
 
-- Jocher, G. et al. (2023). YOLOv8. Ultralytics. https://github.com/ultralytics/ultralytics
-- Tan, M. & Le, Q. (2019). EfficientNet: Rethinking Model Scaling for CNNs. ICML.
-- Philipp Jund et al. Freiburg Groceries Dataset. https://github.com/PhilJd/freiburg_groceries_dataset
-- USDA FoodData Central. https://fdc.nal.usda.gov/
+YOLOv8 — Ultralytics  
+https://github.com/ultralytics/ultralytics
+
+ResNet50 — He et al.  
+https://arxiv.org/abs/1512.03385
+
+MobileNetV2 — Sandler et al.  
+https://arxiv.org/abs/1801.04381
+
+Freiburg Groceries Dataset  
+https://github.com/PhilJd/freiburg_groceries_dataset
+
+USDA FoodData Central  
+https://fdc.nal.usda.gov/
